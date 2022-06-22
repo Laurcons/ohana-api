@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV === "test") {
+    const test = await import("./test/index.js");
+    await test.runAll();
+    process.exit();
+}
+
 import express from "express";
 import chalk from "chalk";
 import { initializeInjectables } from "./service/index.js";
