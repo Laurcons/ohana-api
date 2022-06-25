@@ -12,6 +12,11 @@ import router from "./route/index.js";
 const app = express();
 const PORT = parseInt(process.env.PORT ?? "3000");
 
+app.use((req, res, next) => {
+    res.header("X-Powered-By", "Bubu and Sweat");
+    next();
+});
+
 app.use(router);
 
 async function listenAsync() {

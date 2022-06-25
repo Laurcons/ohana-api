@@ -6,10 +6,12 @@ import { DoesItWorkDTO } from "../validator/DoesItWorkValidators.js";
 
 const router = express.Router();
 
-router.get("/does-it-work",
-    validate({ query: DoesItWorkDTO }),
-    asyncWrap(DoesItWorkController.doesItWork)
-);
+if (process.env.NODE_ENV === "development") {
+    router.get("/does-it-work",
+        validate({ query: DoesItWorkDTO }),
+        asyncWrap(DoesItWorkController.doesItWork)
+    );
+}
 router.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({
         "status": "internal-error",
