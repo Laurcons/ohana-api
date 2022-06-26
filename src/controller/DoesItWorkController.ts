@@ -10,16 +10,18 @@ class DoesItWorkController {
         req: Request<{}, {}, {}, DoesItWorkDTO>,
         res: Response
     ) {
-        const sequel = (await injectSequelize()).sequelize;
-        await sequel.sync({ alter: true });
+        const sequel = await injectSequelize();
+        await sequel.sync({ force: true });
         await (await User.findAll()).map(u => u.destroy());
         await User.create({
             username: "laurcons",
-            password: await bcrypt.hash("1234", 5)
+            password: await bcrypt.hash("1234", 5),
+            roles: ["ROLE_USER", "ROLE_ADMIN"]
         });
         await User.create({
             username: "cristina",
-            password: await bcrypt.hash("1234", 5)
+            password: await bcrypt.hash("1234", 5),
+            roles: ["ROLE_USER"]
         });
         res.json({
             "works": true,

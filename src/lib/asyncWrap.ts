@@ -10,10 +10,6 @@ export default function asyncWrap<TP, TSB, TQB, TQ, TL extends Record<string, an
         next: NextFunction
     ) => {
         handler(req, res)
-        .then(() => next())
-        .catch((err) => { 
-            console.log(chalk.red("Error processing request handler"));
-            next(err);
-        });
+        .catch(next);
     };
 }

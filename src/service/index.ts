@@ -16,7 +16,7 @@ export async function initializeInjectables() {
     }
 }
 
-async function getInjectable<T>(key: string) {
+function getInjectable<T>(key: string) {
     if (key in injectables) {
         return injectables[key] as T;
     } else {
@@ -24,6 +24,6 @@ async function getInjectable<T>(key: string) {
     }
 }
 
-export async function injectSequelize() {
+export function injectSequelize() {
     return getInjectable<SequelizeService>("sequelize");
 }

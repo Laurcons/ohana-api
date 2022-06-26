@@ -1,9 +1,12 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { v4 } from "uuid";
+import UserSession from "./UserSession.js";
 
 class User extends Model {
     declare id: number;
     declare password: string;
+    declare uuid: string;
+    declare roles: string[];
 }
 
 export function registerModel(sequelize: Sequelize) {
@@ -24,9 +27,14 @@ export function registerModel(sequelize: Sequelize) {
         username: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        roles: {
+            type: DataTypes.JSON,
+            allowNull: false
         }
     }, {
-        sequelize
+        sequelize,
+        modelName: "user"
     });
 };
 
