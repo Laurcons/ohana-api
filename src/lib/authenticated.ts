@@ -1,14 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtPayload } from "jsonwebtoken";
-import User from "../model/User.js";
+import User, { UserRole } from "../model/User.js";
 import UserSession from "../model/UserSession.js";
-import { injectSequelize } from "../service/index.js";
 import ApiErrors from "./apiError.js";
-import config from "./config.js";
-import jwtp from "./jwtp.js";
 
 export default function authenticate(
-    roles: string | string[] = "ROLE_USER"
+    roles: UserRole | UserRole[] = []
 ) {
     return (
         req: Request,
@@ -32,7 +28,7 @@ export default function authenticate(
             if (!user)
                 throw ApiErrors.auth.tokenIncorrect();
             console.log(`[] User uuid ${user.uuid.substring(0, 6)}..`);
-            if (!user.roles.some(role => roles.includes(role))) {
+            if (roles.length !== 0 && !user.roles.some(role => roles.includes(role))) {
                 console.log("  \\-> DENIED");
                 throw ApiErrors.auth.permissionDenied();
             }

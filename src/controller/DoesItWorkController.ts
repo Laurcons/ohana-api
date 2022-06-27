@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { injectSequelize } from "../service/index.js";
 import User from '../model/User.js';
 import bcrypt from "bcrypt";
+import { v4 } from 'uuid';
 
 class DoesItWorkController {
 
@@ -11,17 +12,27 @@ class DoesItWorkController {
         res: Response
     ) {
         const sequel = await injectSequelize();
-        await sequel.sync({ force: true });
-        await (await User.findAll()).map(u => u.destroy());
+        await sequel.sync({ alter: true });
+        await Promise.all(
+            (await User.unscoped().findAll()).map(u => u.destroy())
+        );
         await User.create({
             username: "laurcons",
+            uuid: v4(),
             password: await bcrypt.hash("1234", 5),
-            roles: ["ROLE_USER", "ROLE_ADMIN"]
+            roles: ["USER", "ADMIN"],
+            birthday: new Date(2003, 6, 26),
+            pronouns: "he/him/his/his",
+            status: "NOT_ACTIVATED"
         });
         await User.create({
             username: "cristina",
+            uuid: v4(),
             password: await bcrypt.hash("1234", 5),
-            roles: ["ROLE_USER"]
+            roles: ["USER"],
+            birthday: new Date(2003, 6, 26),
+            pronouns: "he/him/his/his",
+            status: "NOT_ACTIVATED"
         });
         res.json({
             "works": true,

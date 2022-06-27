@@ -15,7 +15,7 @@ authRouter.post(
 
 authRouter.post(
     "/logout",
-    authenticated(),
+    authenticated("USER"),
     asyncWrap(AuthController.logout),
 );
 

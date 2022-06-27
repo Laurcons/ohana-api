@@ -15,7 +15,7 @@ class AuthController {
         req: Request<{}, {}, LoginBodyDTO>,
         res: Response
     ) {
-        const user = await User.findOne({
+        const user = await User.unscoped().findOne({
             where: {
                 username: req.body.username
             }
@@ -41,7 +41,7 @@ class AuthController {
         // generate session
         const sess = UserSession.build({
             userId: user.id,
-            expiresAt: DateTime.now().plus({ days: 5 })//.toJSDate()
+            expiresAt: DateTime.now().plus({ days: 5 }).toJSDate()
         });
         sess.save();
         res.json({
